@@ -93,26 +93,10 @@ func (m *ProjectSummaryQuota) ContextValidate(ctx context.Context, formats strfm
 }
 
 func (m *ProjectSummaryQuota) contextValidateHard(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := m.Hard.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("hard")
-		}
-		return err
-	}
-
 	return nil
 }
 
 func (m *ProjectSummaryQuota) contextValidateUsed(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := m.Used.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("used")
-		}
-		return err
-	}
-
 	return nil
 }
 
