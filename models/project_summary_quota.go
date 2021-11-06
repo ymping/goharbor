@@ -11,7 +11,6 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/goharbor/harbor/src/pkg/quota/types"
 )
 
 // ProjectSummaryQuota project summary quota
@@ -20,10 +19,10 @@ import (
 type ProjectSummaryQuota struct {
 
 	// The hard limits of the quota
-	Hard types.ResourceList `json:"hard,omitempty"`
+	Hard ResourceList `json:"hard,omitempty"`
 
 	// The used status of the quota
-	Used types.ResourceList `json:"used,omitempty"`
+	Used ResourceList `json:"used,omitempty"`
 }
 
 // Validate validates this project summary quota
@@ -49,11 +48,13 @@ func (m *ProjectSummaryQuota) validateHard(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := m.Hard.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("hard")
+	if m.Hard != nil {
+		if err := m.Hard.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("hard")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
@@ -64,11 +65,13 @@ func (m *ProjectSummaryQuota) validateUsed(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := m.Used.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("used")
+	if m.Used != nil {
+		if err := m.Used.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("used")
+			}
+			return err
 		}
-		return err
 	}
 
 	return nil
@@ -93,10 +96,26 @@ func (m *ProjectSummaryQuota) ContextValidate(ctx context.Context, formats strfm
 }
 
 func (m *ProjectSummaryQuota) contextValidateHard(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Hard.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("hard")
+		}
+		return err
+	}
+
 	return nil
 }
 
 func (m *ProjectSummaryQuota) contextValidateUsed(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.Used.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("used")
+		}
+		return err
+	}
+
 	return nil
 }
 
